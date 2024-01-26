@@ -1,18 +1,20 @@
 ---
-title: Getting Started
-author: cotes
-date: 2019-08-09 20:55:00 +0800
+title: Overview
+author: Hao CHENG
+date: 2024-01-26 18:18:00 +0800
 categories: [Blogging, Tutorial]
-tags: [getting started]
+tags: [Bio & Intro]
 pin: true
-img_path: '/posts/20180809'
+img_path: 'assets\img\favicons\background.png'
 ---
 
-## Prerequisites
+# Hao CHENG
 
-Follow the instructions in the [Jekyll Docs](https://jekyllrb.com/docs/installation/) to complete the installation of the basic environment. [Git](https://git-scm.com/) also needs to be installed.
+## Bio
 
-## Installation
+I am a MS student in The Chinese University of Hong Kong, Shenzhen mainly focusing on operations research and large language models.
+
+<!-- ## Installation
 
 ### Creating a New Site
 
@@ -109,7 +111,7 @@ There are a few things to get ready for.
 
 Next, configure the _Pages_ service.
 
-1. Browse to your repository on GitHub. Select the tab _Settings_, then click _Pages_ in the left navigation bar. Then, in the **Source** section (under _Build and deployment_), select [**GitHub Actions**][pages-workflow-src] from the dropdown menu.  
+1. Browse to your repository on GitHub. Select the tab _Settings_, then click _Pages_ in the left navigation bar. Then, in the **Source** section (under _Build and deployment_), select [**GitHub Actions**][pages-workflow-src] from the dropdown menu.
 ![Build source](pages-source-light.png){: .light .border .normal w='375' h='140' }
 ![Build source](pages-source-dark.png){: .dark .normal w='375' h='140' }
 
@@ -132,4 +134,4 @@ Unless you specified the output path, the generated site files will be placed in
 [nodejs]: https://nodejs.org/
 [starter]: https://github.com/cotes2020/chirpy-starter
 [pages-workflow-src]: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow
-[latest-tag]: https://github.com/cotes2020/jekyll-theme-chirpy/tags
+[latest-tag]: https://github.com/cotes2020/jekyll-theme-chirpy/tags -->
