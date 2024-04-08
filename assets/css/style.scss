@@ -1,7 +1,6 @@
 ---
 ---
 
-@import 'jekyll-theme-architect';
 
 // .tabs {
 //   float: left; /* Align the tabs to the left */
@@ -21,7 +20,7 @@
 // }
 .tabs {
   /* Remove float:right and add display:inline-block to align tabs to the left */
-  display: inline-block;
+  float: left;
 }
 
 .tabs a {
@@ -31,7 +30,7 @@
   color: #ffffff;
   background-color: #007bff; /* Blue background color */
   border-radius: 5px 5px 0 0; /* Rounded corners for top-left and top-right */
-  margin-right: 8px; /* Add space between tabs */
+  margin-right: 0px; /* Add space between tabs */
   transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
 
