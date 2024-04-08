@@ -1,7 +1,7 @@
 ---
 ---
 
-@import "jekyll-theme-architect"
+@import {"jekyll-theme-architect"}
 // .tabs {
 //   float: left; /* Align the tabs to the left */
 // }
@@ -19,7 +19,6 @@
 //   background-color: #0056b3; /* Darker blue background color on hover */
 // }
 .tabs {
-  /* Remove float:right and add display:inline-block to align tabs to the left */
   float: left;
 }
 
