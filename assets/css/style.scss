@@ -2,3 +2,20 @@
 ---
 
 @import 'jekyll-theme-architect';
+
+.tab {
+    float: right; /* Align the tab to the right */
+  }
+  
+  .tab a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #007bff; /* Blue background color */
+  }
+  
+  .tab a:hover {
+    background-color: #0056b3; /* Darker blue background color on hover */
+  }
+  
