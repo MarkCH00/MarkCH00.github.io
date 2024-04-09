@@ -12,14 +12,16 @@
   padding: 10px 20px; /* Increase padding for better touch interaction */
   text-decoration: none;
   color: #ffffff;
-  background-color: #007bff; /* Blue background color */
+  background-color: #1379b4; /* Blue background color */
   border-radius: 5px 5px 0 0; /* Rounded corners for top-left and top-right */
   margin-right: 0px; /* Add space between tabs */
   transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  font-family: "Prompt";
+  font-size: large;
 }
 
 .tabs a:hover {
-  background-color: #0056b3; /* Darker blue background color on hover */
+  background-color: #1e5b9c; /* Darker blue background color on hover */
 }
 
 /* Styling for the active tab */
