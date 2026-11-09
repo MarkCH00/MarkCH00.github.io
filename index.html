@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dusk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0b0f0e" />
+    <title>薪刻 · 把时间换成看得见的回报</title>
+    <meta
+      name="description"
+      content="一个按北京时间实时计算赚钱速度与今日累计收入的极简时钟。所有计算仅在本机完成。"
+    />
+    <script>
+      /* Restore the saved theme before first paint to avoid a flash. */
+      (function () {
+        try {
+          var t = localStorage.getItem("xinke-theme");
+          if (/^(dusk|paper|celadon|sun)$/.test(t)) {
+            document.documentElement.dataset.theme = t;
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-phase="working">
+    <div class="ambient" aria-hidden="true">
+      <span class="ambient-glow ambient-glow--gold"></span>
+      <span class="ambient-glow ambient-glow--mint"></span>
+      <span class="ambient-grid"></span>
+    </div>
+
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="薪刻首页">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none">
+              <circle cx="20" cy="20" r="15.5" stroke="currentColor" stroke-width="1.4" />
+              <path d="M20 11.5v9l5.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+              <circle cx="20" cy="20" r="1.6" fill="currentColor" />
+            </svg>
+          </span>
+          <span class="brand-copy">
+            <span class="brand-name">薪刻</span>
+            <span class="brand-sub">Salary, in real time.</span>
+          </span>
+        </a>
+
+        <div class="topbar-actions">
+          <div class="theme-picker" role="radiogroup" aria-label="界面主题">
+            <svg class="theme-picker-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="8" cy="8" r="5.6" stroke="currentColor" stroke-width="1.2" />
+              <path d="M8 2.4v11.2" stroke="currentColor" stroke-width="1.2" />
+              <path d="M11.8 4.2 4.2 11.8" stroke="currentColor" stroke-width="1.2" opacity="0.55" />
+            </svg>
+            <button class="theme-dot" type="button" role="radio" aria-checked="true" data-theme-value="dusk" title="夜幕" aria-label="主题：夜幕">
+              <span class="swatch swatch--dusk" aria-hidden="true"></span>
+            </button>
+            <button class="theme-dot" type="button" role="radio" aria-checked="false" data-theme-value="paper" title="晨纸" aria-label="主题：晨纸">
+              <span class="swatch swatch--paper" aria-hidden="true"></span>
+            </button>
+            <button class="theme-dot" type="button" role="radio" aria-checked="false" data-theme-value="celadon" title="青瓷" aria-label="主题：青瓷">
+              <span class="swatch swatch--celadon" aria-hidden="true"></span>
+            </button>
+            <button class="theme-dot" type="button" role="radio" aria-checked="false" data-theme-value="sun" title="蜜阳" aria-label="主题：蜜阳">
+              <span class="swatch swatch--sun" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div class="live-pill" aria-label="实时北京时间，UTC 加 8 小时">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span>北京时间</span>
+          <span class="live-divider" aria-hidden="true"></span>
+          <span class="live-utc">UTC+8</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="layout">
+        <section class="panel hero" aria-labelledby="todayHeading">
+          <div class="hero-head">
+            <div>
+              <p class="eyebrow">TODAY'S LEDGER</p>
+              <p class="today" id="todayHeading">正在读取北京时间</p>
+            </div>
+
+            <div class="orbit" id="orbit" aria-hidden="true">
+              <span class="orbit-dot"></span>
+              <span class="orbit-center">
+                <span>BJT</span>
+                <strong>+8</strong>
+              </span>
+            </div>
+          </div>
+
+          <div class="clock-block">
+            <p class="clock-caption">
+              <span class="caption-line" aria-hidden="true"></span>
+              北京时间 · 自动读取本机时钟
+            </p>
+            <time class="clock" id="clock" datetime="">
+              <span class="clock-main" id="clockMain">00:00</span><span class="clock-seconds" id="clockSeconds">:00</span>
+            </time>
+          </div>
+
+          <div class="earnings">
+            <div class="earnings-head">
+              <p class="ledger-label">
+                <span class="ledger-mark" aria-hidden="true"></span>
+                当前已累计
+                <span class="ledger-note">今日</span>
+              </p>
+              <p class="status" id="status">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span id="statusText">正在赚钱</span>
+              </p>
+            </div>
+
+            <div class="money-line">
+              <span class="currency" aria-hidden="true">¥</span>
+              <span class="money" id="earned">0.00</span>
+            </div>
+
+            <dl class="metrics">
+              <div class="metric">
+                <dt>赚钱速度</dt>
+                <dd>¥&nbsp;<span id="rate">0.00</span><span class="metric-unit">/ min</span></dd>
+              </div>
+              <div class="metric">
+                <dt>今日封顶</dt>
+                <dd>¥&nbsp;<span id="dailyCap">0.00</span></dd>
+              </div>
+              <div class="metric">
+                <dt>每日工时</dt>
+                <dd id="duration">0 小时</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="progress-block">
+            <div class="progress-head">
+              <span>今日工作进度</span>
+              <span id="progressPercent">0%</span>
+            </div>
+            <div
+              class="progress-track"
+              id="progressTrack"
+              role="progressbar"
+              aria-label="今日工作进度"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+            >
+              <span class="progress-fill" id="progressFill"></span>
+              <span class="progress-head-dot" id="progressHead"></span>
+            </div>
+            <div class="progress-meta">
+              <span id="startLabel">09:00 开工</span>
+              <span class="progress-note" id="progressNote">等待开工</span>
+              <span id="endLabel">18:00 收工</span>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel settings" aria-labelledby="settingsHeading">
+          <div class="settings-head">
+            <div>
+              <p class="eyebrow">YOUR RHYTHM</p>
+              <h1 id="settingsHeading">设定你的工作节奏</h1>
+            </div>
+            <button class="reset-button" id="resetButton" type="button" aria-label="恢复示例数据" title="恢复示例数据">
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path
+                  d="M4.2 7.1A6.4 6.4 0 1 1 3.7 12M4.2 7.1V3.4M4.2 7.1h3.7"
+                  stroke="currentColor"
+                  stroke-width="1.35"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <p class="settings-intro">收入随时间流动，以分钟为单位结算。</p>
+
+          <form id="salaryForm" novalidate>
+            <div class="field">
+              <label for="monthlySalary">每月工资</label>
+              <div class="input-shell">
+                <span class="input-affix" aria-hidden="true">¥</span>
+                <input
+                  id="monthlySalary"
+                  name="monthlySalary"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  max="1000000000"
+                  step="100"
+                  value="12000"
+                  aria-describedby="formMessage"
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+                <span class="input-unit">元</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="workDays">平均每月工作天数</label>
+              <div class="input-shell">
+                <input
+                  id="workDays"
+                  name="workDays"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  max="31"
+                  step="0.25"
+                  value="21.75"
+                  aria-describedby="formMessage"
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+                <span class="input-unit">天 / 月</span>
+              </div>
+            </div>
+
+            <fieldset class="field time-field">
+              <legend>平均每天工作时间</legend>
+              <div class="time-range">
+                <label class="time-cell" for="startTime">
+                  <span>上班</span>
+                  <input id="startTime" name="startTime" type="time" value="09:00" step="60" aria-describedby="formMessage" />
+                </label>
+                <span class="range-arrow" aria-hidden="true">→</span>
+                <label class="time-cell" for="endTime">
+                  <span>下班</span>
+                  <input id="endTime" name="endTime" type="time" value="18:00" step="60" aria-describedby="formMessage" />
+                </label>
+              </div>
+              <p class="field-hint" id="durationHint">共 9 小时 · 540 分钟</p>
+            </fieldset>
+
+            <p class="form-message" id="formMessage" role="alert"></p>
+
+            <div class="form-actions">
+              <button
+                class="calculate-button"
+                id="calculateButton"
+                type="submit"
+                aria-describedby="formMessage applyNote"
+              >
+                <span id="calculateLabel">更新计算</span>
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path
+                    d="M3.5 10h12M11 5.5 15.5 10 11 14.5"
+                    stroke="currentColor"
+                    stroke-width="1.45"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <p class="apply-note" id="applyNote" aria-live="polite">
+                当前数据已按左侧设定计算
+              </p>
+            </div>
+          </form>
+
+          <div class="settings-rule" aria-hidden="true"></div>
+
+          <dl class="summary">
+            <div>
+              <dt>每月折算工时</dt>
+              <dd><span id="monthlyHours">195.75</span> 小时</dd>
+            </div>
+            <div>
+              <dt>日均收入</dt>
+              <dd>¥&nbsp;<span id="dailyAverage">551.72</span></dd>
+            </div>
+          </dl>
+
+          <p class="save-note">
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M4.5 7V5a3.5 3.5 0 1 1 7 0v2M3.3 7h9.4v6H3.3z"
+                stroke="currentColor"
+                stroke-width="1.1"
+                stroke-linejoin="round"
+              />
+            </svg>
+            自动保存在本机，数据不会上传
+          </p>
+        </aside>
+      </div>
+
+      <footer class="footer">
+        <p>假设每个工作日等长，结果仅作估算。</p>
+        <p class="footer-time">BEIJING · ASIA/SHANGHAI <span aria-hidden="true">/</span> <span id="footerYear">2026</span></p>
+      </footer>
+    </main>
+
+    <noscript>
+      <p class="noscript">需要启用 JavaScript 才能读取北京时间并计算收入。</p>
+    </noscript>
+
+    <script src="./theme.js"></script>
+    <script src="./salary.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
